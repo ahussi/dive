@@ -25,6 +25,7 @@ func main() {
 		},
 	); err != nil {
 		// print the error to stderr and exit with a non-zero status code
+		// using exit code 1 to indicate a general error (could be more specific in the future)
 		fmt.Fprintln(os.Stderr, "error:", err.Error())
 		os.Exit(1)
 	}
