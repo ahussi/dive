@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"strings"
 
 	"github.com/anchore/dive/cmd"
 )
@@ -42,7 +43,6 @@ func isUsageError(err error) bool {
 		return false
 	}
 	// heuristic: cobra usage errors typically contain "usage" in the message
-	msg := err.Error()
-	return len(msg) > 0 && (msg == "usage" ||
-		len(msg) >= 5 && msg[:5] == "usage")
+	msg := strings.ToLower(err.Error())
+	return strings.HasPrefix(msg, "usage")
 }
