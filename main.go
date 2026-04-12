@@ -48,5 +48,6 @@ func isUsageError(err error) bool {
 	return strings.HasPrefix(msg, "usage") ||
 		strings.HasPrefix(msg, "unknown command") ||
 		strings.HasPrefix(msg, "unknown flag") ||
+		strings.HasPrefix(msg, "unknown shorthand flag") ||
 		strings.HasPrefix(msg, "invalid argument")
 }
