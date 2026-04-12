@@ -24,7 +24,8 @@ func main() {
 			GitDescription: gitDescription,
 		},
 	); err != nil {
-		fmt.Fprintln(os.Stderr, err.Error())
+		// print the error to stderr and exit with a non-zero status code
+		fmt.Fprintln(os.Stderr, "error:", err.Error())
 		os.Exit(1)
 	}
 }
