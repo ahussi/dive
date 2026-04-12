@@ -25,10 +25,24 @@ func main() {
 		},
 	); err != nil {
 		// print the error to stderr and exit with a non-zero status code
-		// using exit code 1 to indicate a general error (could be more specific in the future)
 		fmt.Fprintln(os.Stderr, "error:", err.Error())
-		// NOTE: consider mapping specific error types to distinct exit codes
-		// e.g. exit code 2 for usage errors, 3 for image-not-found, etc.
-		os.Exit(1)
+		// exit code 2 for usage/input errors, 1 for all other errors
+		exitCode := 1
+		if isUsageError(err) {
+			exitCode = 2
+		}
+		os.Exit(exitCode)
 	}
+}
+
+// isUsageError returns true if the error appears to be caused by incorrect
+// user input or invalid CLI usage rather than an internal failure.
+func isUsageError(err error) bool {
+	if err == nil {
+		return false
+	}
+	// heuristic: cobra usage errors typically contain "usage" in the message
+	msg := err.Error()
+	return len(msg) > 0 && (msg == "usage" ||
+		len(msg) >= 5 && msg[:5] == "usage")
 }
