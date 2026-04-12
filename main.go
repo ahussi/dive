@@ -42,7 +42,11 @@ func isUsageError(err error) bool {
 	if err == nil {
 		return false
 	}
-	// heuristic: cobra usage errors typically contain "usage" in the message
+	// heuristic: cobra usage errors typically contain "usage" in the message,
+	// or start with "unknown command" / "unknown flag" / "invalid argument"
 	msg := strings.ToLower(err.Error())
-	return strings.HasPrefix(msg, "usage")
+	return strings.HasPrefix(msg, "usage") ||
+		strings.HasPrefix(msg, "unknown command") ||
+		strings.HasPrefix(msg, "unknown flag") ||
+		strings.HasPrefix(msg, "invalid argument")
 }
