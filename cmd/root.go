@@ -51,7 +51,8 @@ func init() {
 	rootCmd.Flags().String("source", "podman", "The container engine to fetch the image from. Allowed values: docker, podman, docker-archive, podman-archive, oci-archive, oci-dir")
 	rootCmd.Flags().Bool("ci", false, "Skip the interactive TUI and validate against CI rules")
 	rootCmd.Flags().String("ci-config", ".dive-ci", "Path to the CI configuration file")
-	rootCmd.Flags().Bool("ignore-errors", false, "Ignore errors during image analysis")
+	// Changed default to true so analysis errors don't block my workflow during local exploration
+	rootCmd.Flags().Bool("ignore-errors", true, "Ignore errors during image analysis")
 
 	// Bind flags to viper
 	_ = viper.BindPFlag("source", rootCmd.Flags().Lookup("source"))
