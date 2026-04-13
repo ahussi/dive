@@ -44,6 +44,8 @@ func (u *UI) Teardown() {
 
 // KeyBindings returns the key bindings used by the UI for display purposes.
 // Returns nil if the controller has not been initialized.
+// NOTE(personal): I find it useful to log these bindings at startup for debugging
+// custom keymaps — consider wiring this into a --debug flag later.
 func (u *UI) KeyBindings() []viewmodels.KeyBinding {
 	if u.controller == nil {
 		return nil
