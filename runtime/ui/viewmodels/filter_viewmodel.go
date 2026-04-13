@@ -22,8 +22,11 @@ func NewFilterViewModel() *FilterViewModel {
 }
 
 // SetFilter updates the current filter string and compiles it into a regex.
-// An empty string clears the filter. Returns an error if the string is not
-// a valid regular expression.
+// An empty string (or a string that is only whitespace) clears the filter.
+// Returns an error if the string is not a valid regular expression.
+//
+// Personal note: trimming is done *before* storing filterString so that
+// Filter() never returns a string that differs from what was compiled.
 func (vm *FilterViewModel) SetFilter(filter string) error {
 	vm.mu.Lock()
 	defer vm.mu.Unlock()
@@ -42,13 +45,14 @@ func (vm *FilterViewModel) SetFilter(filter string) error {
 		return err
 	}
 
+	// Store the trimmed string so Filter() is consistent with what was compiled.
 	vm.filterString = filter
 	vm.filterRegex = re
 	vm.hasFilter = true
 	return nil
 }
 
-// Filter returns the current raw filter string.
+// Filter returns the current raw filter string (already trimmed).
 func (vm *FilterViewModel) Filter() string {
 	vm.mu.RLock()
 	defer vm.mu.RUnlock()
