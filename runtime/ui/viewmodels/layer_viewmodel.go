@@ -83,10 +83,12 @@ func humanizeBytes(bytes int64) string {
 	return fmt.Sprintf("%.1f %cB", float64(bytes)/float64(div), "KMGTPE"[exp])
 }
 
-// truncate shortens a string to the given max length, appending "…" if truncated.
+// truncate shortens a string to the given max length, appending "\u2026" if truncated.
+// Uses rune-aware slicing to avoid splitting multibyte UTF-8 characters.
 func truncate(s string, max int) string {
-	if len(s) <= max {
+	runes := []rune(s)
+	if len(runes) <= max {
 		return s
 	}
-	return s[:max-1] + "…"
+	return string(runes[:max-1]) + "\u2026"
 }
