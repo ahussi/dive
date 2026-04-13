@@ -34,6 +34,7 @@ func (u *UI) Run() error {
 
 // Teardown cleans up any resources used by the UI.
 // Note: always safe to call even if Run() was never invoked.
+// This is deferred in main, so it will always execute on exit.
 func (u *UI) Teardown() {
 	if u.controller != nil {
 		u.controller.Teardown()
