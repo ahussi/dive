@@ -33,6 +33,7 @@ func (u *UI) Run() error {
 }
 
 // Teardown cleans up any resources used by the UI.
+// Note: always safe to call even if Run() was never invoked.
 func (u *UI) Teardown() {
 	if u.controller != nil {
 		u.controller.Teardown()
@@ -40,6 +41,7 @@ func (u *UI) Teardown() {
 }
 
 // KeyBindings returns the key bindings used by the UI for display purposes.
+// Returns nil if the controller has not been initialized.
 func (u *UI) KeyBindings() []viewmodels.KeyBinding {
 	if u.controller == nil {
 		return nil
