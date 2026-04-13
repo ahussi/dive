@@ -47,7 +47,8 @@ func init() {
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dive.yaml)")
 
 	// Local flags for the root command
-	rootCmd.Flags().String("source", "docker", "The container engine to fetch the image from. Allowed values: docker, podman, docker-archive, podman-archive, oci-archive, oci-dir")
+	// Default source changed to "podman" since I primarily use podman locally
+	rootCmd.Flags().String("source", "podman", "The container engine to fetch the image from. Allowed values: docker, podman, docker-archive, podman-archive, oci-archive, oci-dir")
 	rootCmd.Flags().Bool("ci", false, "Skip the interactive TUI and validate against CI rules")
 	rootCmd.Flags().String("ci-config", ".dive-ci", "Path to the CI configuration file")
 	rootCmd.Flags().Bool("ignore-errors", false, "Ignore errors during image analysis")
