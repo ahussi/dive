@@ -51,5 +51,7 @@ func isUsageError(err error) bool {
 		strings.HasPrefix(msg, "unknown shorthand flag") ||
 		strings.HasPrefix(msg, "invalid argument") ||
 		strings.HasPrefix(msg, "required flag") ||
-		strings.HasPrefix(msg, "accepts")
+		strings.HasPrefix(msg, "accepts") ||
+		strings.HasPrefix(msg, "bad flag") ||
+		strings.HasPrefix(msg, "flag needs an argument")
 }
