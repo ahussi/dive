@@ -46,6 +46,8 @@ func (u *UI) Teardown() {
 // Returns nil if the controller has not been initialized.
 // NOTE(personal): I find it useful to log these bindings at startup for debugging
 // custom keymaps — consider wiring this into a --debug flag later.
+// NOTE(personal): also handy to dump these to ~/.config/dive/keybindings.txt on
+// first run so I don't have to keep looking them up in the source code.
 func (u *UI) KeyBindings() []viewmodels.KeyBinding {
 	if u.controller == nil {
 		return nil
