@@ -55,5 +55,7 @@ func isUsageError(err error) bool {
 		strings.HasPrefix(msg, "bad flag") ||
 		strings.HasPrefix(msg, "flag needs an argument") ||
 		// also treat "subcommand required" style messages as usage errors
-		strings.Contains(msg, "subcommand is required")
+		strings.Contains(msg, "subcommand is required") ||
+		// treat "at least" messages (e.g. "accepts at least N arg(s)") as usage errors
+		strings.Contains(msg, "at least")
 }
