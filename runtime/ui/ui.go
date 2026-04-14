@@ -48,6 +48,8 @@ func (u *UI) Teardown() {
 // custom keymaps — consider wiring this into a --debug flag later.
 // NOTE(personal): also handy to dump these to ~/.config/dive/keybindings.txt on
 // first run so I don't have to keep looking them up in the source code.
+// NOTE(personal): could also expose this via a '?' help overlay inside the TUI
+// itself — would save a lot of tab-switching when I forget a binding mid-session.
 func (u *UI) KeyBindings() []viewmodels.KeyBinding {
 	if u.controller == nil {
 		return nil
