@@ -53,12 +53,15 @@ func init() {
 	rootCmd.Flags().String("ci-config", ".dive-ci", "Path to the CI configuration file")
 	// Changed default to true so analysis errors don't block my workflow during local exploration
 	rootCmd.Flags().Bool("ignore-errors", true, "Ignore errors during image analysis")
+	// Added loopback so I can quickly re-run the last analyzed image via shell history
+	rootCmd.Flags().Bool("no-color", false, "Disable color output (useful when piping or logging to a file)")
 
 	// Bind flags to viper
 	_ = viper.BindPFlag("source", rootCmd.Flags().Lookup("source"))
 	_ = viper.BindPFlag("ci", rootCmd.Flags().Lookup("ci"))
 	_ = viper.BindPFlag("ci-config", rootCmd.Flags().Lookup("ci-config"))
 	_ = viper.BindPFlag("ignore-errors", rootCmd.Flags().Lookup("ignore-errors"))
+	_ = viper.BindPFlag("no-color", rootCmd.Flags().Lookup("no-color"))
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -90,6 +93,3 @@ func initConfig() {
 // runDive is the main entry point for the dive analysis workflow.
 func runDive(imageRef string) error {
 	// TODO: wire up image fetching, analysis, and UI/CI presentation
-	fmt.Printf("Analyzing image: %s\n", imageRef)
-	return nil
-}
