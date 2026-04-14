@@ -27,6 +27,9 @@ func NewFilterViewModel() *FilterViewModel {
 //
 // Personal note: trimming is done *before* storing filterString so that
 // Filter() never returns a string that differs from what was compiled.
+//
+// Personal note: regex matching is case-insensitive by default ((?i) prefix)
+// since I almost always forget to account for case when filtering paths.
 func (vm *FilterViewModel) SetFilter(filter string) error {
 	vm.mu.Lock()
 	defer vm.mu.Unlock()
@@ -40,7 +43,14 @@ func (vm *FilterViewModel) SetFilter(filter string) error {
 		return nil
 	}
 
-	re, err := regexp.Compile(filter)
+	// Wrap with (?i) to make matching case-insensitive unless the user has
+	// already supplied their own flags (i.e. the string starts with "(?")
+	pattern := filter
+	if !strings.HasPrefix(filter, "(?") {
+		pattern = "(?i)" + filter
+	}
+
+	re, err := regexp.Compile(pattern)
 	if err != nil {
 		return err
 	}
