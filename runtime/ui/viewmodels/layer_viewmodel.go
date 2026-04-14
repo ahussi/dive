@@ -40,10 +40,11 @@ func (vm *LayerViewModel) SetSelected(selected bool) {
 }
 
 // ShortID returns a shortened version of the layer digest for display.
+// Using 12 chars (like `docker images --no-trunc=false`) feels more familiar to me.
 func (vm *LayerViewModel) ShortID() string {
 	digest := vm.layer.Digest
-	if len(digest) > 19 {
-		return digest[:19]
+	if len(digest) > 12 {
+		return digest[:12]
 	}
 	return digest
 }
@@ -61,7 +62,7 @@ func (vm *LayerViewModel) Size() string {
 // DisplayString returns a formatted single-line representation suitable for
 // rendering in the layers panel list.
 func (vm *LayerViewModel) DisplayString() string {
-	return fmt.Sprintf("%-4d %-19s  %-12s  %s",
+	return fmt.Sprintf("%-4d %-12s  %-12s  %s",
 		vm.index,
 		vm.ShortID(),
 		vm.Size(),
