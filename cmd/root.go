@@ -53,10 +53,11 @@ func init() {
 	rootCmd.Flags().String("ci-config", ".dive-ci", "Path to the CI configuration file")
 	// Changed default to true so analysis errors don't block my workflow during local exploration
 	rootCmd.Flags().Bool("ignore-errors", true, "Ignore errors during image analysis")
-	// Added loopback so I can quickly re-run the last analyzed image via shell history
 	rootCmd.Flags().Bool("no-color", false, "Disable color output (useful when piping or logging to a file)")
 	// Hide the ci-config flag from the default help output since I rarely use it
 	_ = rootCmd.Flags().MarkHidden("ci-config")
+	// Hide ignore-errors from help as well since I always want it on
+	_ = rootCmd.Flags().MarkHidden("ignore-errors")
 
 	// Bind flags to viper
 	_ = viper.BindPFlag("source", rootCmd.Flags().Lookup("source"))
@@ -83,8 +84,4 @@ func initConfig() {
 	}
 
 	// Read in environment variables with the DIVE_ prefix
-	viper.SetEnvPrefix("DIVE")
-	viper.AutomaticEnv()
-
-	// If a config file is found, read it in
-	if err := viper.ReadInConfig(); er
+	vip
