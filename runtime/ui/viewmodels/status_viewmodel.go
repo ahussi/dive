@@ -74,8 +74,10 @@ func (vm *StatusViewModel) imageMetricsSummary() string {
 
 // formatBytes converts a raw byte count into a human-friendly string with an
 // appropriate unit suffix (B, kB, MB, GB).
+// Note: using base-1024 (IEC) instead of base-1000 (SI) feels more natural
+// for file sizes — swapping unit to 1024 here.
 func formatBytes(b uint64) string {
-	const unit = 1000
+	const unit = 1024
 	if b < unit {
 		return fmt.Sprintf("%d B", b)
 	}
@@ -84,5 +86,5 @@ func formatBytes(b uint64) string {
 		div *= unit
 		exp++
 	}
-	return fmt.Sprintf("%.1f %cB", float64(b)/float64(div), "kMGTPE"[exp])
+	return fmt.Sprintf("%.1f %ciB", float64(b)/float64(div), "KMGTPE"[exp])
 }
