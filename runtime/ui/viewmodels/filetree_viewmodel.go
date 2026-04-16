@@ -89,6 +89,27 @@ func (vm *FileTreeViewModel) CursorDown() {
 	}
 }
 
+// CursorPageUp moves the cursor up by pageSize rows, clamped to the top.
+// Useful for quickly navigating large trees without holding the up key.
+func (vm *FileTreeViewModel) CursorPageUp(pageSize int) {
+	vm.mu.Lock()
+	defer vm.mu.Unlock()
+	vm.cursor -= pageSize
+	if vm.cursor < 0 {
+		vm.cursor = 0
+	}
+}
+
+// CursorPageDown moves the cursor down by pageSize rows, clamped to the bottom.
+func (vm *FileTreeViewModel) CursorPageDown(pageSize int) {
+	vm.mu.Lock()
+	defer vm.mu.Unlock()
+	vm.cursor += pageSize
+	if vm.cursor >= len(vm.rows) {
+		vm.cursor = len(vm.rows) - 1
+	}
+}
+
 // Cursor returns the current cursor index.
 func (vm *FileTreeViewModel) Cursor() int {
 	vm.mu.RLock()
@@ -113,63 +134,4 @@ func (vm *FileTreeViewModel) SelectedNode() *filetree.FileNode {
 	return vm.rows[vm.cursor]
 }
 
-// refresh rebuilds the flattened rows slice from the current tree state,
-// respecting collapsed directories and the active filter.
-// Must be called with vm.mu held for writing.
-func (vm *FileTreeViewModel) refresh() {
-	if vm.tree == nil {
-		vm.rows = nil
-		return
-	}
-	vm.rows = make([]*filetree.FileNode, 0, 64)
-	vm.tree.VisitDepthChildFirst(func(node *filetree.FileNode) error {
-		// Skip the root node itself.
-		if node == vm.tree.Root {
-			return nil
-		}
-		// If any ancestor is collapsed, skip this node.
-		if vm.isAncestorCollapsed(node) {
-			return nil
-		}
-		// Apply filter: if set, only show nodes whose path contains the filter string.
-		if vm.filterRegex != "" && !containsString(node.Path(), vm.filterRegex) {
-			return nil
-		}
-		vm.rows = append(vm.rows, node)
-		return nil
-	}, nil)
-	// Clamp cursor.
-	if vm.cursor >= len(vm.rows) {
-		vm.cursor = len(vm.rows) - 1
-	}
-	if vm.cursor < 0 {
-		vm.cursor = 0
-	}
-}
-
-// isAncestorCollapsed returns true if any ancestor directory of node is collapsed.
-func (vm *FileTreeViewModel) isAncestorCollapsed(node *filetree.FileNode) bool {
-	current := node.Parent
-	for current != nil && current != vm.tree.Root {
-		if vm.collapsedPaths[current.Path()] {
-			return true
-		}
-		current = current.Parent
-	}
-	return false
-}
-
-// containsString is a simple substring check used for filtering.
-func containsString(s, substr string) bool {
-	return len(substr) == 0 || len(s) >= len(substr) && (s == substr ||
-		len(s) > 0 && containsSubstring(s, substr))
-}
-
-func containsSubstring(s, sub string) bool {
-	for i := 0; i <= len(s)-len(sub); i++ {
-		if s[i:i+len(sub)] == sub {
-			return true
-		}
-	}
-	return false
-}
+// refresh rebu
