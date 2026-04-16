@@ -51,6 +51,8 @@ func (u *UI) Teardown() {
 // NOTE(personal): could also expose this via a '?' help overlay inside the TUI
 // itself — would save a lot of tab-switching when I forget a binding mid-session.
 // NOTE(personal): or just print them to stderr when DIVE_DEBUG=1 is set in env.
+// NOTE(personal): printing to stderr on DIVE_DEBUG feels like the lowest-effort
+// win here — no UI changes needed, just an env check in Run() or NewUI().
 func (u *UI) KeyBindings() []viewmodels.KeyBinding {
 	if u.controller == nil {
 		return nil
